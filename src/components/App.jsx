@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
-import { ContactItem } from './ContactItem/ContactItem';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 
@@ -65,12 +64,10 @@ export class App extends Component {
         <h2>Contacts</h2>
         <Filter value={filter} onChange={this.filterContact} />
 
-        <ContactList>
-          <ContactItem
-            contacts={filtredContacts}
-            onDeleteContact={this.deleteContact}
-          />
-        </ContactList>
+        <ContactList
+          contacts={filtredContacts}
+          onDeleteContact={this.deleteContact}
+        />
       </>
     );
   }
