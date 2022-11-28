@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
@@ -15,13 +15,13 @@ export class App extends Component {
     filter: '',
   };
 
-  addContact = ({ name, number }) => {
-    const contact = {
-      id: nanoid(),
-      name,
-      number,
-    };
+  addContact = contact => {
+    this.setState(prevState => ({
+      contacts: [contact, ...prevState.contacts],
+    }));
+  };
 
+  checkSameName = name => {
     const sameName = this.state.contacts.find(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
@@ -29,11 +29,8 @@ export class App extends Component {
       alert(`${name} is already in contacts`);
       return;
     }
-    this.setState(prevState => ({
-      contacts: [contact, ...prevState.contacts],
-    }));
+    return !sameName;
   };
-
   deleteContact = id => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== id),
@@ -59,7 +56,7 @@ export class App extends Component {
     return (
       <>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.addContact} />
+        <ContactForm onSubmit={this.addContact} onCheck={this.checkSameName} />
 
         <h2>Contacts</h2>
         <Filter value={filter} onChange={this.filterContact} />

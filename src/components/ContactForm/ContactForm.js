@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import css from './ContactForm.module.css';
 
 export class ContactForm extends Component {
+  static propTypes = {
+    state: PropTypes.exact({
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    }),
+  };
   state = {
     name: '',
     number: '',
@@ -16,9 +22,22 @@ export class ContactForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { name, number } = this.state;
 
-    this.props.onSubmit(this.state);
+    const validate = this.formValidate();
+    if (!validate) return;
+
+    this.props.onSubmit({ id: nanoid(), name, number });
     this.setState({ name: '', number: '' });
+  };
+  formValidate = () => {
+    const { name, number } = this.state;
+    const { onCheck } = this.props;
+    if (!name || !number) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+    return onCheck(name);
   };
   render() {
     const { name, number } = this.state;
@@ -61,8 +80,3 @@ export class ContactForm extends Component {
     );
   }
 }
-
-ContactForm.propTypes = {
-  name: PropTypes.string,
-  number: PropTypes.string,
-};
